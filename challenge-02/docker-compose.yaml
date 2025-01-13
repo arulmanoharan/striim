@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=${ENV}
+    volumes:
+      - ./golang/file-dev.txt:/root/file-dev.txt
+      - ./golang/file-prod.txt:/root/file-prod.txt
+    command: >
+      sh -c 'if [ "$${ENV}" = "DEV" ]; then
+              cp -f /root/file-dev.txt /root/file.txt;
+            else
+              cp -f /root/file-prod.txt /root/file.txt;
+            fi &&
+            ./server'
